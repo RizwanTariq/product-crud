@@ -53,6 +53,22 @@
                 </ValidationProvider>
               </div>
               <div class="form-group has-danger">
+                <label for="productStock" class="form-label mt-2">Stock</label>
+                <ValidationProvider
+                  rules="required|numeric"
+                  v-slot="{ errors }"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors[0] }"
+                    id="productStock"
+                    v-model="countInStock"
+                  />
+                  <div class="invalid-feedback">{{ errors[0] }}</div>
+                </ValidationProvider>
+              </div>
+              <div class="form-group has-danger">
                 <label for="productCategory" class="form-label mt-2"
                   >Category</label
                 >
@@ -88,7 +104,7 @@
                   id="productImage"
                   @change="handleImgUpload"
                 />
-                <small class="text-info">{{
+                <small class="text-warning">{{
                   validatePicture ? "Picture is mandatory" : ""
                 }}</small>
               </div>
@@ -126,22 +142,55 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+import {
+  createProduct,
+  updateProduct,
+  getProduct,
+} from "~/services/productService";
 export default {
   name: "ProductForm",
   components: {
     ValidationProvider,
     ValidationObserver,
   },
+  props: ["productId"],
   data() {
     return {
+      id: "",
       name: "",
       brand: "",
+      countInStock: "",
       price: null,
       category: "",
       description: "",
       picture: null,
       validatePicture: true,
     };
+  },
+  async created() {
+    if (this.productId) {
+      const {
+        id,
+        name,
+        brand,
+        countInStock,
+        price,
+        category,
+        description,
+        picture,
+      } = this.$store.getters.product(this.productId);
+      this.validatePicture = false;
+      this.id = id;
+      this.name = name;
+      this.brand = brand;
+      this.countInStock = countInStock;
+      this.price = price;
+      this.category = category;
+      this.description = description;
+      this.picture = picture;
+    } else {
+      return null;
+    }
   },
   methods: {
     handleImgUpload(e) {
@@ -153,18 +202,28 @@ export default {
         this.validatePicture = false;
       };
     },
-    onSubmit(e) {
+    async onSubmit(e) {
       if (this.validatePicture) return null;
       const product = {
-        id: Date.now().toString(),
+        id: this.id !== "" ? this.id : Date.now().toString(),
         name: this.name,
         brand: this.brand,
         price: this.price,
+        countInStock: this.countInStock,
         category: this.category,
         description: this.description,
         picture: this.picture,
       };
-      console.log(product);
+      if (!this.productId) {
+        this.$store.dispatch({ type: "createProduct", product: product });
+      } else {
+        this.$store.dispatch({
+          type: "updateProduct",
+          id: product.id,
+          product: { ...product, ...{ id: "" } },
+        });
+      }
+      this.$router.push({ path: "/products" });
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <product-form />
+  <product-form :productId="$route.params.id" />
 </template>
 
 <script>

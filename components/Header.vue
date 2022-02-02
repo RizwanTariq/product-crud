@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-      <nuxt-link class="navbar-brand" to="/">Products</nuxt-link>
+      <nuxt-link class="navbar-brand" to="/">Home</nuxt-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -17,7 +17,7 @@
       <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <nuxt-link class="nav-link" to="/">Home</nuxt-link>
+            <nuxt-link class="nav-link" to="/products">Products</nuxt-link>
           </li>
         </ul>
       </div>
