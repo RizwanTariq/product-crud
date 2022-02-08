@@ -5,7 +5,7 @@ export const getProducts = async () => {
 };
 
 export const getProduct = async (id) => {
-  const res = await fetch("http://localhost:5000/products");
+  const res = await fetch(`http://localhost:5000/products`);
   const data = await res.json();
   const product = await data.find((product) => product.id === id);
   return product;

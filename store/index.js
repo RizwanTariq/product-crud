@@ -7,8 +7,8 @@ import {
 } from "~/services/productService";
 const createStore = () => {
   return new Vuex.Store({
-    state: {
-      products: [],
+    state() {
+      return { products: [] };
     },
     mutations: {
       SET_PRODUCTS(state, products) {
@@ -37,6 +37,9 @@ const createStore = () => {
       },
     },
     getters: {
+      products: (state) => {
+        return state.products;
+      },
       product: (state) => (id) => {
         return state.products.find((p) => p.id === id);
       },

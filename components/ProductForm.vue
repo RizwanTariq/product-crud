@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col"></div>
       <div class="col-6">
-        <ValidationObserver v-slot="{ invalid }">
+        <ValidationObserver>
           <form @submit.prevent="onSubmit">
             <fieldset>
               <div class="form-group has-danger">
@@ -127,7 +127,7 @@
               <button
                 type="submit"
                 class="btn btn-primary mt-3"
-                :class="{ disabled: invalid || validatePicture }"
+                :class="{ disabled: validatePicture }"
               >
                 Submit
               </button>
@@ -142,11 +142,6 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-import {
-  createProduct,
-  updateProduct,
-  getProduct,
-} from "~/services/productService";
 export default {
   name: "ProductForm",
   components: {
